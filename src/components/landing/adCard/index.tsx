@@ -44,6 +44,15 @@ const StyledAdCard = styled.div`
     gap: 70px;
   }
 `
+const ItemContainer = styled.div`
+  display: flex;
+  align-items: center;
+`
+const categoryImages: { [key: string]: string } = {
+  'Automóveis': '/categories/automoveis.svg',
+  'Informática': '/categories/informatica.svg',
+  'Roupas & Acessórios': '/categories/roupas_acessorios.svg'
+}
 
 export default function AdCard() {
   return (
@@ -55,6 +64,10 @@ export default function AdCard() {
             <PostDate>Postado em {new Date(item.date).toLocaleDateString()}</PostDate>
             <Price>{item.price}</Price>
             <Description>{item.description}</Description>
+            <ItemContainer>
+              <img src={categoryImages[item.category]} alt={item.category} />
+              <Category>{item.category}</Category>
+            </ItemContainer>
             <Category>{item.category}</Category>
           </div>
         ))}
