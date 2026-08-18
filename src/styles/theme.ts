@@ -7,7 +7,9 @@ const theme = {
   span: 'rgb(239, 68, 68)',
   userName: 'rgb(228, 228, 231)',
   userEmail: 'rgb(161, 161, 170)',
-  bottom: '#3b2121'
+  bottom: '#3b2121',
+  cardBorder: 'rgba(217, 217, 217, 1)',
+  cardBackground: 'rgba(217, 217, 217, 1)'
 }
 
 export default theme
