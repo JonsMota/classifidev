@@ -4,7 +4,10 @@ const theme = {
   white: 'rgba(255, 255, 255, 1)',
   subTitle: '#817e7e',
   button: 'rgba(242, 128, 0, 1)',
-  span: 'rgb(239, 68, 68)'
+  span: 'rgb(239, 68, 68)',
+  userName: 'rgb(228, 228, 231)',
+  userEmail: 'rgb(161, 161, 170)',
+  bottom: '#3b2121'
 }
 
 export default theme
