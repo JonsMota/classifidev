@@ -9,6 +9,8 @@ import {
   Description,
   Category
 } from '@/components/landing/adCard/StyledClassified'
+import Data from '@/logic/core/utils/Data'
+import Dinheiro from '@/logic/core/utils/Dinheiro'
 
 const StyledAdCard = styled.div`
   display: grid;
@@ -61,8 +63,8 @@ export default function AdCard() {
         {falseClassified.map((item, index) => (
           <div key={index}>
             <Name>{item.name}</Name>
-            <PostDate>Postado em {new Date(item.date).toLocaleDateString()}</PostDate>
-            <Price>{item.price}</Price>
+            <PostDate>Postado em {Data.ddmmyy.formatar(new Date(item.date))}</PostDate>
+            <Price>{Dinheiro.formatar(item.price)}</Price>
             <Description>{item.description}</Description>
             <ItemContainer>
               <img src={categoryImages[item.category]} alt={item.category} />
