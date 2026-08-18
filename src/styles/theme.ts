@@ -9,7 +9,10 @@ const theme = {
   userEmail: 'rgb(161, 161, 170)',
   bottom: '#3b2121',
   cardBorder: 'rgba(217, 217, 217, 1)',
-  cardBackground: 'rgba(217, 217, 217, 1)'
+  cardBackground: 'rgba(217, 217, 217, 1)',
+  searchBorder: 'rgba(0, 0, 0, 1)',
+  searchBackground: 'rgba(164, 164, 164, 1)',
+  searchText: 'rgba(0, 0, 0, 1)'
 }
 
 export default theme

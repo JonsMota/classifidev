@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { useState } from 'react'
 
 import Area from '../common/Area'
 import falseClassified from '@/data/constants/falseClassified'
@@ -12,6 +13,7 @@ import {
 import Data from '@/logic/core/utils/Data'
 import Dinheiro from '@/logic/core/utils/Dinheiro'
 import AdCardContainer from '@/components/landing/adCard/AdCardContainer'
+import SearchAndFilter from '@/components/landing/adCard/SearchAndFilter'
 
 const StyledAdCard = styled.div`
   display: grid;
@@ -58,10 +60,26 @@ const categoryImages: { [key: string]: string } = {
 }
 
 export default function AdCard() {
+  const [searchText, setSearchText] = useState('')
+  const [selectedCategory, setSelectedCategory] = useState('Todas as categorias')
+
+  const handleSearch = (text: string, selectedCategory: string) => {
+    setSearchText(searchText)
+    setSelectedCategory(selectedCategory)
+  }
+
+  const filteredClassifieds = falseClassified.filter((item) => {
+    const matchesSearchText = item.name.toLowerCase().includes(searchText.toLowerCase())
+    const matchesCategory =
+      selectedCategory === 'Todas as categorias' || item.category === selectedCategory
+    return matchesSearchText && matchesCategory
+  })
+
   return (
     <Area>
+      <SearchAndFilter onSearch={handleSearch} />
       <StyledAdCard>
-        {falseClassified.map((item, index) => (
+        {filteredClassifieds.map((item, index) => (
           <AdCardContainer key={index}>
             <Name>{item.name}</Name>
             <PostDate>Postado em {Data.ddmmyy.formatar(new Date(item.date))}</PostDate>
