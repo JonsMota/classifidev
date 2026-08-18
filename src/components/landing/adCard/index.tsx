@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { useState } from 'react'
+import Link from 'next/link'
 
 import Area from '../common/Area'
 import falseClassified from '@/data/constants/falseClassified'
@@ -80,17 +81,21 @@ export default function AdCard() {
       <SearchAndFilter onSearch={handleSearch} />
       <StyledAdCard>
         {filteredClassifieds.map((item, index) => (
-          <AdCardContainer key={index}>
-            <Name>{item.name}</Name>
-            <PostDate>Postado em {Data.ddmmyy.formatar(new Date(item.date))}</PostDate>
-            <Price>{Dinheiro.formatar(item.price)}</Price>
-            <Description>{item.description}</Description>
-            <ItemContainer>
-              <img src={categoryImages[item.category]} alt={item.category} />
-              <Category>{item.category}</Category>
-            </ItemContainer>
-            <Category>{item.category}</Category>
-          </AdCardContainer>
+          <Link key={index} href={`/ad/${item.id}`} passHref legacyBehavior>
+            <a style={{ textDecoration: 'none', color: 'inherit' }}>
+              <AdCardContainer key={index}>
+                <Name>{item.name}</Name>
+                <PostDate>Postado em {Data.ddmmyy.formatar(new Date(item.date))}</PostDate>
+                <Price>{Dinheiro.formatar(item.price)}</Price>
+                <Description>{item.description}</Description>
+                <ItemContainer>
+                  <img src={categoryImages[item.category]} alt={item.category} />
+                  <Category>{item.category}</Category>
+                </ItemContainer>
+                <Category>{item.category}</Category>
+              </AdCardContainer>
+            </a>
+          </Link>
         ))}
       </StyledAdCard>
     </Area>
