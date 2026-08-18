@@ -11,6 +11,7 @@ import {
 } from '@/components/landing/adCard/StyledClassified'
 import Data from '@/logic/core/utils/Data'
 import Dinheiro from '@/logic/core/utils/Dinheiro'
+import AdCardContainer from '@/components/landing/adCard/AdCardContainer'
 
 const StyledAdCard = styled.div`
   display: grid;
@@ -61,7 +62,7 @@ export default function AdCard() {
     <Area>
       <StyledAdCard>
         {falseClassified.map((item, index) => (
-          <div key={index}>
+          <AdCardContainer key={index}>
             <Name>{item.name}</Name>
             <PostDate>Postado em {Data.ddmmyy.formatar(new Date(item.date))}</PostDate>
             <Price>{Dinheiro.formatar(item.price)}</Price>
@@ -71,7 +72,7 @@ export default function AdCard() {
               <Category>{item.category}</Category>
             </ItemContainer>
             <Category>{item.category}</Category>
-          </div>
+          </AdCardContainer>
         ))}
       </StyledAdCard>
     </Area>
