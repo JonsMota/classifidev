@@ -12,7 +12,11 @@ const theme = {
   cardBackground: 'rgba(217, 217, 217, 1)',
   searchBorder: 'rgba(0, 0, 0, 1)',
   searchBackground: 'rgba(164, 164, 164, 1)',
-  searchText: 'rgba(0, 0, 0, 1)'
+  searchText: 'rgba(0, 0, 0, 1)',
+  detailPageBackground: '#121212',
+  deleteButtonText: 'rgb(189, 0, 0)',
+  postDateText: '#ccc',
+  priceText: 'rgb(0, 255, 10)'
 }
 
 export default theme
