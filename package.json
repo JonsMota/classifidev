@@ -9,9 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.9.1",
+    "joi": "^18.2.5",
     "next": "14.1.4",
     "react": "^18",
     "react-dom": "^18",
+    "react-hook-form": "^7.85.0",
     "styled-components": "^6.5.3",
     "uuid": "^14.0.1"
   },

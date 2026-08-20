@@ -16,7 +16,9 @@ const theme = {
   detailPageBackground: '#121212',
   deleteButtonText: 'rgb(189, 0, 0)',
   postDateText: '#ccc',
-  priceText: 'rgb(0, 255, 10)'
+  priceText: 'rgb(0, 255, 10)',
+  formInputBackground: '#A4A4A4',
+  formInputText: '#000'
 }
 
 export default theme

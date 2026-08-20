@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 import Button from '../common/Button'
+import Link from 'next/link'
 
 const MenuContainer = styled.div`
   display: flex;
@@ -13,7 +14,11 @@ const StyledButton = styled(Button)`
 export default function Menu() {
   return (
     <MenuContainer>
-      <StyledButton>Criar anúncio</StyledButton>
+      <Link href="/ads/create" passHref legacyBehavior>
+        <a style={{ textDecoration: 'none' }}>
+          <StyledButton>Criar anúncio</StyledButton>
+        </a>
+      </Link>
     </MenuContainer>
   )
 }
