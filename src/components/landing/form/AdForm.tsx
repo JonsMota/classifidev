@@ -1,10 +1,13 @@
 import styled, { css, DefaultTheme } from 'styled-components'
 import { useForm } from 'react-hook-form'
 import { joiResolver } from '@hookform/resolvers/joi'
+import { useContext } from 'react'
+import { useRouter } from 'next/router'
 
 import InterfaceClassified from '@/logic/core/Transaction'
-import Mask from '@/logic/core/utils/Mask'
 import { adSchema } from '@/logic/core/schemas/adSchema'
+import AdContext from '@/data/context/AdContext'
+import Mask from '@/logic/core/utils/Mask'
 
 const Form = styled.form`
   display: flex;
@@ -96,6 +99,8 @@ type FormData = {
 
 export default function AdForm() {
   // useForm gerencia todo o estado e validação do formulário
+  const { addAd } = useContext(AdContext)
+  const router = useRouter()
   const {
     register,
     handleSubmit,
@@ -127,8 +132,11 @@ export default function AdForm() {
       whatsapp: parseInt(unmaskedWhatsapp, 10),
       description: data.description
     }
-    console.log('Dados validados e prontos para enviar:', adData)
-    // Futuramente, a chamada para a API virá aqui.
+    // Executa a função do Contexto para salvar o novo anúncio
+    addAd(adData) 
+    
+    // Redireciona o usuário para a página inicial (Home)
+    router.push('/') 
   }
 
   return (

@@ -3,6 +3,7 @@ import { AppProps } from 'next/app'
 
 import { ThemeProvider } from 'styled-components'
 import theme from '../styles/theme'
+import { AdProvider } from '@/data/context/AdContext'
 
 interface MyAppProps extends AppProps {
   Component: ComponentType<any>
@@ -11,9 +12,11 @@ interface MyAppProps extends AppProps {
 
 function App({ Component, pageProps }: MyAppProps) {
   return (
-    <ThemeProvider theme={theme}>
-      <Component {...pageProps} />
-    </ThemeProvider>
+    <AdProvider>
+      <ThemeProvider theme={theme}>
+        <Component {...pageProps} />
+      </ThemeProvider>
+    </AdProvider>
   )
 }
 

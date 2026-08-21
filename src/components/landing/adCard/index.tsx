@@ -1,9 +1,9 @@
 import styled from 'styled-components'
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import Link from 'next/link'
 
 import Area from '../common/Area'
-import falseClassified from '@/data/constants/falseClassified'
+import AdContext from '@/data/context/AdContext'
 import {
   Name,
   PostDate,
@@ -15,6 +15,7 @@ import Data from '@/logic/core/utils/Data'
 import Dinheiro from '@/logic/core/utils/Dinheiro'
 import AdCardContainer from '@/components/landing/adCard/AdCardContainer'
 import SearchAndFilter from '@/components/landing/adCard/SearchAndFilter'
+import Icon from '@/components/landing/common/Icon'
 
 const StyledAdCard = styled.div`
   display: grid;
@@ -61,6 +62,7 @@ const categoryImages: { [key: string]: string } = {
 }
 
 export default function AdCard() {
+  const { ads } = useContext(AdContext)
   const [searchText, setSearchText] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('Todas as categorias')
 
@@ -69,7 +71,7 @@ export default function AdCard() {
     setSelectedCategory(selectedCategory)
   }
 
-  const filteredClassifieds = falseClassified.filter((item) => {
+  const filteredClassifieds = ads.filter((item) => {
     const matchesSearchText = item.name.toLowerCase().includes(searchText.toLowerCase())
     const matchesCategory =
       selectedCategory === 'Todas as categorias' || item.category === selectedCategory
