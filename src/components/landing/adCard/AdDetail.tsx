@@ -138,16 +138,28 @@ export default function AdDetail() {
   const { id } = router.query
   const [ad, setAd] = useState<any>(null)
 
-  // 3. Pegar a lista de anúncios (ads) do Contexto
-  const { ads } = useContext(AdContext)
+  // ATUALIZAÇÃO 1: Pegar a função deleteAd do contexto
+  const { ads, deleteAd } = useContext(AdContext)
 
   useEffect(() => {
-    // 4. Garante que a busca só ocorra se 'id' e 'ads' existirem
     if (id && ads.length > 0) {
       const foundAd = ads.find((item) => item.id === String(id))
       setAd(foundAd)
     }
-  }, [id, ads]) // 5. Adicione 'ads' na lista de dependências
+  }, [id, ads]) 
+
+// 2 NOVA FUNÇÃO: Lida com a exclusão do anúncio
+  function handleDelete() {
+    if (window.confirm('Tem certeza que deseja excluir este anúncio?')) {
+      deleteAd(String(id))
+      router.push('/')
+    }
+  }
+
+  // 3 NOVA FUNÇÃO: Lida com a navegação para a edição
+  function handleEdit() {
+    router.push(`/ads/create?id=${id}`)
+  }
 
   if (!ad) {
     return <p>Carregando...</p>
@@ -166,14 +178,13 @@ export default function AdDetail() {
           <Title>{ad.name}</Title>
           <EditDeleteContainer>
             <EditDeleteButton
-              onClick={() => console.log('ação de editar o anúncio no futuro:', ad.id)}
+              onClick={handleEdit}
             >
               <Image src="/icons/Edit.svg" alt="Editar" width="24" height="24" />
               Editar
             </EditDeleteButton>
             <EditDeleteButton
-              $isDelete={true}
-              onClick={() => console.log('ação de deletar o anúncio no futuro:', ad.id)}
+              $isDelete={true} onClick={handleDelete}
             >
               <Image src="/icons/Delete.svg" alt="Deletar" width="24" height="24" />
               Deletar

@@ -91,7 +91,12 @@ export default function AdCard() {
                 <Price>{Dinheiro.formatar(item.price)}</Price>
                 <Description>{item.description}</Description>
                 <ItemContainer>
-                  <img src={categoryImages[item.category]} alt={item.category} />
+                  <Icon // 7. Usar componente dinâmico Icon
+                    icon={categoryImages[item.category]}
+                    alt={item.category}
+                    color="black"
+                    size={20} 
+                  />
                   <Category>{item.category}</Category>
                 </ItemContainer>
                 <Category>{item.category}</Category>
