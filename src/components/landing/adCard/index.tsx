@@ -97,7 +97,6 @@ export default function AdCard() {
                     color="black"
                     size={20} 
                   />
-                  <Category>{item.category}</Category>
                 </ItemContainer>
                 <Category>{item.category}</Category>
               </AdCardContainer>
