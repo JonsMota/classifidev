@@ -18,7 +18,8 @@ const theme = {
   postDateText: '#ccc',
   priceText: 'rgb(0, 255, 10)',
   formInputBackground: '#A4A4A4',
-  formInputText: '#000'
+  formInputText: '#000',
+  linkText: '#ccc'
 }
 
 export default theme
