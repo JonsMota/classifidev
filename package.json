@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.9.1",
+    "@types/bcryptjs": "^2.4.6",
+    "bcryptjs": "^3.0.3",
     "joi": "^18.2.5",
     "mongoose": "^9.9.4",
     "next": "14.1.4",
