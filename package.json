@@ -11,8 +11,11 @@
   "dependencies": {
     "@hookform/resolvers": "^5.9.1",
     "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.10",
     "bcryptjs": "^3.0.3",
+    "cookie": "^2.0.1",
     "joi": "^18.2.5",
+    "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.9.4",
     "next": "14.1.4",
     "react": "^18",
