@@ -1,8 +1,9 @@
-// ATUALIZAÇÃO: Importar useEffect e useCallback para controle de efeitos e performance
 import { createContext, useState, ReactNode, useEffect, useCallback } from 'react'
 import InterfaceClassified from '@/logic/core/Transaction'
-// REMOÇÃO: Não precisamos mais dos dados falsos aqui, a API é a fonte da verdade.
-// import falseClassified from '@/data/constants/falseClassified'
+
+// CORREÇÃO: Definimos um tipo específico para a resposta da API.
+// Ele tem todos os campos de InterfaceClassified, exceto 'id', e adiciona '_id'.
+type ApiAd = Omit<InterfaceClassified, 'id'> & { _id: string }
 
 interface AdContextProps {
   ads: InterfaceClassified[]
@@ -14,70 +15,64 @@ interface AdContextProps {
 const AdContext = createContext<AdContextProps>({} as AdContextProps)
 
 export function AdProvider({ children }: { children: ReactNode }) {
-  // O estado agora começa vazio. Ele será preenchido pela API.
   const [ads, setAds] = useState<InterfaceClassified[]>([])
 
-  // Função para buscar todos os anúncios da API.
-  // Usamos useCallback para otimizar, evitando que a função seja recriada a cada renderização.
   const fetchAds = useCallback(async () => {
     try {
       const resp = await fetch('/api/ads')
-      if (!resp.ok) throw new Error('Falha ao buscar dados')
-      const adsData = await resp.json()
-      setAds(adsData)
+      // CORREÇÃO: Tipamos a constante 'data' com nosso novo tipo.
+      const data: ApiAd[] = await resp.json()
+      // Mapeia a resposta da API para o formato que o frontend espera
+      // CORREÇÃO: O tipo de 'ad' agora é inferido corretamente, sem precisar de 'any'.
+      const formattedData = data.map((ad) => ({
+        ...ad,
+        id: ad._id.toString() // Converte o _id do MongoDB para id
+      }))
+      setAds(formattedData)
     } catch (error) {
       console.error('Falha ao buscar anúncios:', error)
     }
   }, [])
 
-  // useEffect para carregar os anúncios assim que o componente for montado.
-  // O array de dependências [fetchAds] garante que isso rode apenas uma vez.
   useEffect(() => {
     fetchAds()
   }, [fetchAds])
 
-  // Função para ADICIONAR um anúncio via API
   async function addAd(newAd: Omit<InterfaceClassified, 'id' | 'date'>) {
     try {
-      const resp = await fetch('/api/ads', {
+      await fetch('/api/ads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newAd)
       })
-
-      if (!resp.ok) throw new Error('Falha ao criar anúncio')
-      // Após criar, buscamos a lista atualizada para refletir a mudança.
-      await fetchAds()
+      await fetchAds() // Recarrega os dados para refletir a adição
     } catch (error) {
       console.error(error)
     }
   }
 
-  // Função para ATUALIZAR um anúncio via API
   async function updateAd(updatedAd: InterfaceClassified) {
     try {
-      const resp = await fetch(`/api/ads/${updatedAd.id}`, {
+      // Ao enviar para a API, não precisamos do campo 'id' no corpo,
+      // pois ele já está na URL.
+      const { id, ...adData } = updatedAd
+      await fetch(`/api/ads/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updatedAd)
+        body: JSON.stringify(adData)
       })
-
-      if (!resp.ok) throw new Error('Falha ao atualizar anúncio')
-      await fetchAds()
+      await fetchAds() // Recarrega os dados para refletir a atualização
     } catch (error) {
       console.error(error)
     }
   }
 
-  // Função para DELETAR um anúncio via API
   async function deleteAd(id: string) {
     try {
-      const resp = await fetch(`/api/ads/${id}`, {
+      await fetch(`/api/ads/${id}`, {
         method: 'DELETE'
       })
-
-      if (!resp.ok) throw new Error('Falha ao deletar anúncio')
-      await fetchAds()
+      await fetchAds() // Recarrega os dados para refletir a exclusão
     } catch (error) {
       console.error(error)
     }
