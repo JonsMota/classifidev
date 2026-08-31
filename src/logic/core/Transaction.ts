@@ -6,4 +6,5 @@ export default interface Transaction {
   price: number
   whatsapp: number | string
   description: string
+  userId: string // Adicionando o ID do dono à interface do frontend.
 }

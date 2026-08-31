@@ -1,45 +1,83 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import dbConnect from '@/lib/mongoose'
 import Ad from '@/models/Ad'
+import jwt from 'jsonwebtoken'
+
+const SECRET = process.env.JWT_SECRET as string
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await dbConnect()
   const { id } = req.query // No Pages Router, o id vem do objeto query
 
+  // --- LÓGICA DE AUTENTICAÇÃO ---
+  const token = req.cookies.auth_token
+  if (!token) {
+    return res.status(401).json({ message: 'Não autorizado: token não fornecido.' })
+  }
+
+  let loggedInUserId: string
+  try {
+    const decoded = jwt.verify(token, SECRET) as { userId: string }
+    loggedInUserId = decoded.userId
+  } catch (error) {
+    return res.status(401).json({ message: 'Token inválido ou expirado.' })
+  }
+  // --- FIM DA LÓGICA DE AUTENTICAÇÃO ---
+
+  // Se passou pela autenticação, o usuário está logado.
+  // A autorização (verificação de propriedade) será feita na própria query do DB.
   switch (req.method) {
-    case 'GET':
+    case 'GET': {
+      // Para GET, a lógica original é mantida, pois qualquer um pode ver um anúncio.
       try {
         const ad = await Ad.findById(id)
-        if (!ad) return res.status(404).json({ message: 'Anúncio não encontrado' })
-        res.status(200).json(ad)
+        if (!ad) {
+          return res.status(404).json({ message: 'Anúncio não encontrado.' })
+        }
+        return res.status(200).json(ad)
       } catch (error) {
-        res.status(500).json({ message: 'Falha ao buscar anúncio', error })
+        return res.status(500).json({ message: 'Erro ao buscar anúncio.', error })
       }
-      break
-
-    case 'PUT':
+    }
+    case 'PUT': {
       try {
-        const updatedAd = await Ad.findByIdAndUpdate(id, req.body, {
-          new: true,
-          runValidators: true
-        })
-        if (!updatedAd) return res.status(404).json({ message: 'Anúncio não encontrado' })
-        res.status(200).json(updatedAd)
-      } catch (error) {
-        res.status(500).json({ message: 'Falha ao atualizar anúncio', error })
-      }
-      break
+        // Adicionamos `userId: loggedInUserId` à query de busca.
+        // O Mongoose só encontrará e atualizará o documento se o ID E o userId baterem.
+        const updatedAd = await Ad.findOneAndUpdate(
+          { _id: id, userId: loggedInUserId }, // Condição de busca atômica
+          req.body, // Dados para atualizar
+          { new: true, runValidators: true }
+        )
 
-    case 'DELETE':
+        // Se `updatedAd` for null, significa que ou o anúncio não existe, ou o usuário não é o dono.
+        // Em ambos os casos, a permissão é negada.
+        if (!updatedAd) {
+          return res.status(403).json({ message: 'Acesso negado ou anúncio não encontrado.' })
+        }
+
+        return res.status(200).json(updatedAd)
+      } catch (error) {
+        if (error instanceof Error && error.name === 'ValidationError') {
+          return res.status(400).json({ message: 'Dados inválidos.', error })
+        }
+        return res.status(500).json({ message: 'Falha ao atualizar anúncio', error })
+      }
+    }
+    case 'DELETE': {
       try {
-        const deletedAd = await Ad.findByIdAndDelete(id)
-        if (!deletedAd) return res.status(404).json({ message: 'Anúncio não encontrado' })
-        res.status(204).end()
-      } catch (error) {
-        res.status(500).json({ message: 'Falha ao deletar anúncio', error })
-      }
-      break
+        // A mesma lógica para deletar.
+        const result = await Ad.deleteOne({ _id: id, userId: loggedInUserId })
 
+        // `deletedCount` será 0 se nenhum documento correspondeu à query.
+        if (result.deletedCount === 0) {
+          return res.status(403).json({ message: 'Acesso negado ou anúncio não encontrado.' })
+        }
+
+        return res.status(204).end()
+      } catch (error) {
+        return res.status(500).json({ message: 'Falha ao deletar anúncio', error })
+      }
+    }
     default:
       res.setHeader('Allow', ['GET', 'PUT', 'DELETE'])
       res.status(405).end(`Método ${req.method} não permitido`)

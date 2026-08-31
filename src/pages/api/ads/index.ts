@@ -1,29 +1,65 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import dbConnect from '@/lib/mongoose'
 import Ad from '@/models/Ad'
+import jwt from 'jsonwebtoken' // Precisamos do jwt para decodificar o token
+
+const SECRET = process.env.JWT_SECRET as string
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await dbConnect() // Garante a conexão com o banco
 
-  switch (req.method) {
-    case 'GET':
+    switch (req.method) {
+    case 'GET': {
       try {
-        const ads = await Ad.find({}).sort({ date: -1 }) // Busca todos e ordena pelos mais recentes
-        res.status(200).json(ads)
+        const token = req.cookies.auth_token
+        let userId = null
+
+        // Se existe um token, tentamos decodificá-lo para pegar o ID do usuário
+        if (token) {
+          try {
+            const decoded = jwt.verify(token, SECRET) as { userId: string }
+            userId = decoded.userId
+          } catch (e) {
+            // Se o token for inválido ou expirado, não fazemos nada. userId continua null.
+          }
+        }
+
+        const ads = await Ad.find({}).sort({ date: -1 })
+        // AGORA RETORNAMOS UM OBJETO: a lista de anúncios E o ID do usuário logado (ou null)
+        return res.status(200).json({ ads, userId })
       } catch (error) {
-        res.status(500).json({ message: 'Falha ao buscar anúncios', error })
+        return res.status(500).json({ message: 'Erro ao buscar anúncios', error })
       }
-      break
+    }
 
     case 'POST':
       try {
-        const newAd = await Ad.create(req.body) // Cria um novo anúncio com os dados do corpo da requisição
-        res.status(201).json(newAd)
-      } catch (error) {
-        res.status(500).json({ message: 'Falha ao criar anúncio', error })
-      }
-      break
+        // 1. Pegar o token do cookie
+        const token = req.cookies.auth_token
+        if (!token) {
+          return res.status(401).json({ message: 'Não autorizado: token não fornecido.' })
+        }
 
+        // 2. Verificar o token e extrair o ID do usuário
+        const { userId } = jwt.verify(token, SECRET) as { userId: string }
+
+        // 3. Criar o anúncio, adicionando o userId ao corpo da requisição
+        const newAd = await Ad.create({
+          ...req.body,
+          userId // Salvando o ID do usuário que criou o anúncio.
+        })
+
+        return res.status(201).json(newAd)
+      } catch (error) {
+        if (error instanceof jwt.JsonWebTokenError) {
+          return res.status(401).json({ message: 'Token inválido.' })
+        }
+        if (error instanceof Error && error.name === 'ValidationError') {
+          return res.status(400).json({ message: 'Dados inválidos.', error })
+        }
+        return res.status(500).json({ message: 'Falha ao criar anúncio', error })
+      }
+    
     default:
       res.setHeader('Allow', ['GET', 'POST'])
       res.status(405).end(`Método ${req.method} não permitido`)
