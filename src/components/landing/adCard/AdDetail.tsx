@@ -1,6 +1,5 @@
 import styled from 'styled-components'
 import { useRouter } from 'next/router'
-// 1. Importar useContext junto com useEffect e useState
 import { useEffect, useState, useContext } from 'react'
 import Image from 'next/image'
 
@@ -11,6 +10,7 @@ import Footer from '@/components/landing/footer'
 // 2. Importar a classe Mask e o AdContext
 import Mask from '@/logic/core/utils/Mask'
 import AdContext from '@/data/context/AdContext'
+import InterfaceClassified from '@/logic/core/Transaction' // ADICIONADO
 
 const PageContainer = styled.div`
   display: flex;
@@ -136,19 +136,23 @@ const categoryImages: { [key: string]: string } = {
 export default function AdDetail() {
   const router = useRouter()
   const { id } = router.query
-  const [ad, setAd] = useState<any>(null)
+  // ALTERADO: useState agora possui o tipo correto
+  const [ad, setAd] = useState<InterfaceClassified | null>(null)
 
-  // ATUALIZAÇÃO 1: Pegar a função deleteAd do contexto
-  const { ads, deleteAd } = useContext(AdContext)
+ // ADICIONADO: loggedInUserId extraído do Contexto
+  const { ads, deleteAd, loggedInUserId } = useContext(AdContext)
 
   useEffect(() => {
     if (id && ads.length > 0) {
       const foundAd = ads.find((item) => item.id === String(id))
-      setAd(foundAd)
+      setAd(foundAd || null)
     }
   }, [id, ads]) 
 
-// 2 NOVA FUNÇÃO: Lida com a exclusão do anúncio
+  // LÓGICA DE EXIBIÇÃO: isOwner será verdadeiro apenas se o usuário logado for o dono
+  const isOwner = ad && loggedInUserId && ad.userId === loggedInUserId
+
+// Lida com a exclusão do anúncio
   function handleDelete() {
     if (window.confirm('Tem certeza que deseja excluir este anúncio?')) {
       deleteAd(String(id))
@@ -156,7 +160,7 @@ export default function AdDetail() {
     }
   }
 
-  // 3 NOVA FUNÇÃO: Lida com a navegação para a edição
+  // Lida com a navegação para a edição
   function handleEdit() {
     router.push(`/ads/create?id=${id}`)
   }
@@ -173,25 +177,22 @@ export default function AdDetail() {
           <Image src="/icons/Flecha_esquerda.svg" alt="Voltar" width="24" height="24" />
           Voltar para a página inicial
         </BackLink>
-
         <TitleContainer>
           <Title>{ad.name}</Title>
-          <EditDeleteContainer>
-            <EditDeleteButton
-              onClick={handleEdit}
-            >
-              <Image src="/icons/Edit.svg" alt="Editar" width="24" height="24" />
-              Editar
-            </EditDeleteButton>
-            <EditDeleteButton
-              $isDelete={true} onClick={handleDelete}
-            >
-              <Image src="/icons/Delete.svg" alt="Deletar" width="24" height="24" />
-              Deletar
-            </EditDeleteButton>
-          </EditDeleteContainer>
+          {/* ADICIONADO: Renderização condicional isolando os botões */}
+          {isOwner && (
+            <EditDeleteContainer>
+              <EditDeleteButton onClick={handleEdit}>
+                <img src="/icons/Edit.svg" alt="Editar" />
+                Editar
+              </EditDeleteButton>
+              <EditDeleteButton $isDelete={true} onClick={handleDelete}>
+                <img src="/icons/Delete.svg" alt="Deletar" />
+                Deletar
+              </EditDeleteButton>
+            </EditDeleteContainer>
+          )}
         </TitleContainer>
-
         <CategoryContainer>
           <Image src={categoryImages[ad.category]} alt={ad.category} width="24" height="24" />
           <p>{ad.category}</p>

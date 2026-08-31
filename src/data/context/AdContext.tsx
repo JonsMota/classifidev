@@ -1,36 +1,46 @@
 import { createContext, useState, ReactNode, useEffect, useCallback } from 'react'
 import InterfaceClassified from '@/logic/core/Transaction'
 
-// CORREÇÃO: Definimos um tipo específico para a resposta da API.
-// Ele tem todos os campos de InterfaceClassified, exceto 'id', e adiciona '_id'.
-type ApiAd = Omit<InterfaceClassified, 'id'> & { _id: string }
+// A API retorna _id e userId. Nosso frontend usa id.
+type ApiAd = Omit<InterfaceClassified, 'id'> & { _id: string; userId: string }
 
 interface AdContextProps {
   ads: InterfaceClassified[]
-  addAd: (ad: Omit<InterfaceClassified, 'id' | 'date'>) => Promise<void>
+  loggedInUserId: string | null
+  // Adicionamos 'userId' ao Omit
+  addAd: (ad: Omit<InterfaceClassified, 'id' | 'date' | 'userId'>) => Promise<void>
+  // updateAd agora aceita um objeto sem o userId
   updateAd: (ad: InterfaceClassified) => Promise<void>
   deleteAd: (id: string) => Promise<void>
+  fetchAds: () => Promise<void>
 }
 
 const AdContext = createContext<AdContextProps>({} as AdContextProps)
 
 export function AdProvider({ children }: { children: ReactNode }) {
   const [ads, setAds] = useState<InterfaceClassified[]>([])
+  const [loggedInUserId, setLoggedInUserId] = useState<string | null>(null)
 
   const fetchAds = useCallback(async () => {
     try {
       const resp = await fetch('/api/ads')
-      // CORREÇÃO: Tipamos a constante 'data' com nosso novo tipo.
-      const data: ApiAd[] = await resp.json()
-      // Mapeia a resposta da API para o formato que o frontend espera
-      // CORREÇÃO: O tipo de 'ad' agora é inferido corretamente, sem precisar de 'any'.
-      const formattedData = data.map((ad) => ({
+      if (!resp.ok) throw new Error('Falha ao buscar dados da API')
+      
+      // A API agora retorna um objeto { ads: [], userId: '...' }	
+      const data: { ads: ApiAd[]; userId: string | null } = await resp.json()
+
+      // Mapeamos a lista de anúncios que está dentro do objeto `data
+     const formattedData = data.ads.map((ad) => ({
         ...ad,
-        id: ad._id.toString() // Converte o _id do MongoDB para id
+        id: ad._id.toString(), // Converte o _id do MongoDB para id
+        userId: ad.userId // Garantimos que o userId está no objeto formatado
       }))
+
       setAds(formattedData)
+      setLoggedInUserId(data.userId) // Armazenamos o ID do usuário logado
     } catch (error) {
       console.error('Falha ao buscar anúncios:', error)
+      setAds([])  // Em caso de erro, garante que a lista fique vazia
     }
   }, [])
 
@@ -38,8 +48,8 @@ export function AdProvider({ children }: { children: ReactNode }) {
     fetchAds()
   }, [fetchAds])
 
-  async function addAd(newAd: Omit<InterfaceClassified, 'id' | 'date'>) {
-    try {
+  async function addAd(newAd: Omit<InterfaceClassified, 'id' | 'date' | 'userId'>) {
+    try {                                                                  
       await fetch('/api/ads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -79,7 +89,9 @@ export function AdProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AdContext.Provider value={{ ads, addAd, updateAd, deleteAd }}>{children}</AdContext.Provider>
+    <AdContext.Provider value={{ ads, loggedInUserId, addAd, updateAd, deleteAd, fetchAds }}>
+      {children}
+    </AdContext.Provider>
   )
 }
 

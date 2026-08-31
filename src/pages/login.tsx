@@ -1,6 +1,8 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
+import AdContext from '@/data/context/AdContext'
+
 import Page from '@/components/template/Page'
 import Header from '@/components/landing/header'
 import Footer from '@/components/landing/footer'
@@ -97,6 +99,7 @@ const RegisterLink = styled.p`
 export default function LoginPage() {
   const router = useRouter()
   const [apiError, setApiError] = useState('')
+  const { fetchAds } = useContext(AdContext) // Obter a função fetchAds do contexto
 
   const {
     register,
@@ -115,6 +118,8 @@ export default function LoginPage() {
     })
 
     if (response.ok) {
+      // Atualiza o estado global ANTES de navegar
+      await fetchAds()
       router.push('/')
     } else {
       const errorData = await response.json()

@@ -129,8 +129,8 @@ export default function AdForm({ id }: { id?: string }) {
     const unmaskedWhatsapp = Mask.unmask(data.whatsapp)
 
     if (id) {
-      // Modo de Edição tem id
-      const updatedAdData: InterfaceClassified = {
+      // Modo de Edição, Adicionado 'userId'
+      const updatedAdData: Omit<InterfaceClassified, 'userId'> = {
         id,
         name: data.name,
         category: data.category,
@@ -139,10 +139,10 @@ export default function AdForm({ id }: { id?: string }) {
         description: data.description,
         date: new Date() // Atualiza a data da modificação
       }
-      updateAd(updatedAdData)
+      updateAd(updatedAdData as InterfaceClassified)
     } else {
-      // Modo de Criação não tem id
-      const newAdData: Omit<InterfaceClassified, 'id' | 'date'> = {
+      // Modo de Criação, Adicionado 'userId' ao Omit
+      const newAdData: Omit<InterfaceClassified, 'id' | 'date' | 'userId'> = {
         name: data.name,
         category: data.category,
         price: parseFloat(unmaskedPrice) / 100,
