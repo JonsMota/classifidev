@@ -25,7 +25,7 @@ const ContentContainer = styled.div`
     width: 1200px;
   }
 
-   @media (min-width: 1600px) {
+  @media (min-width: 1600px) {
     padding-left: 0;
     padding-right: 0;
     width: 1500px;

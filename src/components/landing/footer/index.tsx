@@ -37,7 +37,7 @@ export default function Footer() {
       <Area>
         <StyledContent>
           <StyledText>
-            Criado por <Span>J</Span>onas <Span>M</Span>ota ® {new  Date().getFullYear()}
+            Criado por <Span>J</Span>onas <Span>M</Span>ota ® {new Date().getFullYear()}
           </StyledText>
         </StyledContent>
       </Area>

@@ -2,9 +2,9 @@ import styled from 'styled-components'
 import Link from 'next/link'
 
 interface ButtonItemProps {
-    children: React.ReactNode
-    url?: string
-    className?: string
+  children: React.ReactNode
+  url?: string
+  className?: string
 }
 
 const StyledButton = styled.div`
@@ -26,9 +26,9 @@ const StyledButton = styled.div`
 `
 
 export default function Button(props: ButtonItemProps) {
-    function renderButton() {
-        return <StyledButton>{props.children}</StyledButton>
-    }
+  function renderButton() {
+    return <StyledButton>{props.children}</StyledButton>
+  }
 
-    return props.url ? <Link href={props.url ?? ''}>{renderButton()}</Link> : renderButton()
+  return props.url ? <Link href={props.url ?? ''}>{renderButton()}</Link> : renderButton()
 }

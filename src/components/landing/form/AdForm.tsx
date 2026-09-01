@@ -92,7 +92,7 @@ type FormData = {
 
 // ALTERAÇÃO: O componente agora aceita o ID vindo da página para saber se é edição
 export default function AdForm({ id }: { id?: string }) {
-// ALTERAÇÃO: Trazendo a lista (ads) e a função de atualizar (updateAd) do contexto
+  // ALTERAÇÃO: Trazendo a lista (ads) e a função de atualizar (updateAd) do contexto
   const { ads, addAd, updateAd } = useContext(AdContext)
   const router = useRouter()
 

@@ -1,7 +1,7 @@
-import { v4 as uuid } from "uuid"
+import { v4 as uuid } from 'uuid'
 
 export default class Id {
-    static new(): string {
-        return uuid()
-    }
+  static new(): string {
+    return uuid()
+  }
 }

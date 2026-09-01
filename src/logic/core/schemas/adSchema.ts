@@ -14,7 +14,8 @@ export const adSchema = Joi.object({
       'string.empty': 'O preço é obrigatório.',
       'string.pattern.base': 'O preço não pode ser zero.'
     }),
-  whatsapp: Joi.string().min(14).required().messages({ // (XX) XXXXX-XXXX tem 14 caracteres
+  whatsapp: Joi.string().min(14).required().messages({
+    // (XX) XXXXX-XXXX tem 14 caracteres
     'string.empty': 'O WhatsApp é obrigatório.',
     'string.min': 'Por favor, insira um número de WhatsApp válido.'
   }),
