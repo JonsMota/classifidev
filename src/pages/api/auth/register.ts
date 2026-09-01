@@ -38,7 +38,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     console.error(e)
 
     if (e instanceof Error && e.name === 'ValidationError') {
-      return res.status(400).json({ message: 'Dados inválidos. Verifique os campos e tente novamente.' })
+      return res
+        .status(400)
+        .json({ message: 'Dados inválidos. Verifique os campos e tente novamente.' })
     }
 
     res.status(500).json({ message: 'Erro interno no servidor.' })

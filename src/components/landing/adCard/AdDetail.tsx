@@ -16,7 +16,7 @@ const PageContainer = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: ${(props) => props.theme.detailPageBackground}; 
+  background-color: ${(props) => props.theme.detailPageBackground};
 `
 
 const ContentContainer = styled.div`
@@ -139,7 +139,7 @@ export default function AdDetail() {
   // ALTERADO: useState agora possui o tipo correto
   const [ad, setAd] = useState<InterfaceClassified | null>(null)
 
- // ADICIONADO: loggedInUserId extraído do Contexto
+  // ADICIONADO: loggedInUserId extraído do Contexto
   const { ads, deleteAd, loggedInUserId } = useContext(AdContext)
 
   useEffect(() => {
@@ -147,12 +147,12 @@ export default function AdDetail() {
       const foundAd = ads.find((item) => item.id === String(id))
       setAd(foundAd || null)
     }
-  }, [id, ads]) 
+  }, [id, ads])
 
   // LÓGICA DE EXIBIÇÃO: isOwner será verdadeiro apenas se o usuário logado for o dono
   const isOwner = ad && loggedInUserId && ad.userId === loggedInUserId
 
-// Lida com a exclusão do anúncio
+  // Lida com a exclusão do anúncio
   function handleDelete() {
     if (window.confirm('Tem certeza que deseja excluir este anúncio?')) {
       deleteAd(String(id))

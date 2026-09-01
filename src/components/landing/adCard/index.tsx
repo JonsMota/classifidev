@@ -56,8 +56,8 @@ const ItemContainer = styled.div`
   align-items: center;
 `
 const categoryImages: { [key: string]: string } = {
-  'Automóveis': '/categories/automoveis.svg',
-  'Informática': '/categories/informatica.svg',
+  Automóveis: '/categories/automoveis.svg',
+  Informática: '/categories/informatica.svg',
   'Roupas & Acessórios': '/categories/roupas_acessorios.svg'
 }
 
@@ -95,7 +95,7 @@ export default function AdCard() {
                     icon={categoryImages[item.category]}
                     alt={item.category}
                     color="black"
-                    size={20} 
+                    size={20}
                   />
                 </ItemContainer>
                 <Category>{item.category}</Category>

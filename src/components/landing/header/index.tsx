@@ -20,13 +20,13 @@ interface HeaderProps {
   showMenu?: boolean
 }
 
-export default function Header({ showMenu = true}: HeaderProps) {
+export default function Header({ showMenu = true }: HeaderProps) {
   return (
     <HeaderConatiner>
       <Area>
         <HeaderContent>
-           <Logo />
-           {showMenu && <Menu />}
+          <Logo />
+          {showMenu && <Menu />}
         </HeaderContent>
       </Area>
     </HeaderConatiner>
