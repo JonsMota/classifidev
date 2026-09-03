@@ -23,6 +23,25 @@ const StyledButton = styled.div`
   padding: 13px;
   font-weight: 700;
   font-size: 20px;
+
+  @media (max-width: 900px) {
+    width: 88%;
+    height: 25px;
+    font-size: 19px;
+  }
+
+  @media (max-width: 640px) {
+    width: 82%;
+    height: 20px;
+    font-size: 18px;
+  }
+
+  @media (max-width: 400px) {
+    width: 78%;
+    height: 17px;
+    font-size: 16px;
+    padding: 12px;
+  }
 `
 
 export default function Button(props: ButtonItemProps) {

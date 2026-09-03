@@ -8,6 +8,12 @@ import AdContext from '@/data/context/AdContext'
 const MenuContainer = styled.div`
   display: flex;
   gap: 2.5rem;
+
+  @media (max-width: 640px) {
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 `
 
 const StyledButton = styled(Button)`

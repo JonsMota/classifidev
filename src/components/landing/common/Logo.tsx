@@ -12,6 +12,14 @@ const Title = styled.h2`
   color: ${(props) => props.theme.white};
   font-weight: 700;
   font-size: 36px;
+
+  @media (max-width: 640px) {
+    font-size: 28px;
+  }
+
+  @media (max-width: 320px) {
+    font-size: 24px;
+  }
 `
 
 const StyledSubTitle = styled.h3`
@@ -20,6 +28,16 @@ const StyledSubTitle = styled.h3`
   font-style: italic;
   font-size: 20px;
   margin-top: -30px;
+
+  @media (max-width: 640px) {
+    font-size: 16px;
+    margin-top: -24px;
+  }
+
+  @media (max-width: 320px) {
+    font-size: 14px;
+    margin-top: -20px;
+  }
 `
 
 export default function Logo() {

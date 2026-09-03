@@ -9,6 +9,10 @@ const StyledFooter = styled.div`
   align-items: center;
   height: 100%;
   margin-top: auto;
+
+  @media (max-width: 768px) {
+    padding: 20px 0;
+  }
 `
 
 const StyledContent = styled.div`
@@ -19,12 +23,20 @@ const StyledContent = styled.div`
   height: 60%;
   margin: auto;
   margin-top: 16px;
+
+  @media (max-width: 768px) {
+    width: 90%;
+  }
 `
 const StyledText = styled.h3`
   color: ${(props) => props.theme.white};
   font-weight: 300;
   font-style: italic;
   font-size: 20px;
+
+  @media (max-width: 425px) {
+    font-size: 16px;
+  }
 `
 const Span = styled.span`
   color: ${(props) => props.theme.span};
