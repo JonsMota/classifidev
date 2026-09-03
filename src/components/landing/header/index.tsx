@@ -14,6 +14,13 @@ const HeaderContent = styled.div`
   align-items: center;
   justify-content: space-between;
   min-height: 7.4rem;
+
+  @media (max-width: 640px) {
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px 0;
+  }
 `
 
 interface HeaderProps {

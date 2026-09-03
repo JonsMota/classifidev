@@ -13,6 +13,16 @@ const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
+  @media (min-width: 1220px) {
+    min-height: 313px;
+    padding: 20px;
+  }
+
+  @media (min-width: 1600px) {
+    min-height: 420px;
+    padding: 30px;
+  }
 `
 
 export default function AdCardContainer({ children }: { children: React.ReactNode }) {

@@ -13,6 +13,20 @@ const SearchContainer = styled.div`
   border: 1px solid ${(props) => props.theme.searchBorder};
   border-radius: 10px;
   background-color: ${(props) => props.theme.searchBackground};
+
+  @media (max-width: 900px) {
+    width: 90%;
+    padding: 1px;
+  }
+
+  @media (max-width: 665px) {
+    width: 100%;
+    margin: 20px auto;
+    flex-direction: column;
+    height: auto;
+    padding: 15px;
+    gap: 15px;
+  }
 `
 
 const SearchIconContainer = styled.div`
@@ -22,6 +36,10 @@ const SearchIconContainer = styled.div`
   width: 24px;
   height: 24px;
   margin: 15px;
+
+  @media (max-width: 665px) {
+    display: none;
+  }
 `
 
 const SearchIcon = styled.img`
@@ -50,6 +68,14 @@ const Input = styled.input`
   &:focus {
     outline: none;
   }
+
+  @media (max-width: 665px) {
+     width: 100%;
+     text-align: center;
+     border-bottom: 1px solid ${(props) => props.theme.searchText};
+     box-sizing: border-box;
+     padding: 0px 30px 5px 0px;
+   }
 `
 
 const Separator = styled.div`
@@ -58,6 +84,10 @@ const Separator = styled.div`
   border: 1px;
   margin: 0 15px;
   background-color: ${(props) => props.theme.searchText};
+
+  @media (max-width: 665px) {
+    display: none;
+  }
 `
 
 const CategorySelector = styled.div`
@@ -75,6 +105,12 @@ const CategorySelector = styled.div`
   line-height: 24.2px;
   position: relative;
   color: ${(props) => props.theme.searchText};
+
+  @media (max-width: 665px) {
+    width: 100%;
+    justify-content: center;
+    margin: 0;
+  }
 `
 
 const ContainerArrowIcon = styled.div`
@@ -97,6 +133,14 @@ const CategorySelect = styled.select`
   height: 100%;
   opacity: 0;
   cursor: pointer;
+
+  @media (max-width: 930px) {
+    left: auto;
+    right: 0;
+    width: auto;
+    min-width: 5px; /* ajuste conforme necessário */
+    z-index: 1000; /* evita que o menu fique atrás de outros elementos */
+  }
 `
 
 const categories = ['Todas as categorias', 'Automóveis', 'Informática', 'Roupas & Acessórios']
