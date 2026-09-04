@@ -6,6 +6,37 @@ import User from '@/models/User' // Importar o modelo User
 
 const SECRET = process.env.JWT_SECRET as string
 
+/**
+ * @swagger
+ * /api/ads:
+ *   get:
+ *     tags: [Anúncios]
+ *     summary: Lista todos os anúncios (paginados ou todos)
+ *     responses:
+ *       200:
+ *         description: Lista recuperada com sucesso
+ *   post:
+ *     tags: [Anúncios]
+ *     summary: Cria um novo anúncio (Requer Login)
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [title, price, description]
+ *             properties:
+ *               title: { type: string }
+ *               price: { type: number }
+ *               description: { type: string }
+ *               image: { type: string }
+ *     responses:
+ *       201:
+ *         description: Anúncio criado
+ *       401:
+ *         description: Não autorizado
+ */
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await dbConnect() // Garante a conexão com o banco
 

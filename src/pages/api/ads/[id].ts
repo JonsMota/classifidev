@@ -5,6 +5,53 @@ import jwt from 'jsonwebtoken'
 
 const SECRET = process.env.JWT_SECRET as string
 
+/**
+ * @swagger
+ * /api/ads/{id}:
+ *   get:
+ *     tags: [Anúncios]
+ *     summary: Busca um anúncio pelo ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: string }
+ *     responses:
+ *       200: { description: Detalhes do anúncio }
+ *       404: { description: Anúncio não encontrado }
+ *   put:
+ *     tags: [Anúncios]
+ *     summary: Atualiza um anúncio (Requer ser o Dono)
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: string }
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title: { type: string }
+ *               price: { type: number }
+ *               description: { type: string }
+ *     responses:
+ *       200: { description: Atualizado com sucesso }
+ *       403: { description: Proibido (Não é o dono) }
+ *   delete:
+ *     tags: [Anúncios]
+ *     summary: Remove um anúncio (Requer ser o Dono)
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: string }
+ *     responses:
+ *       204: { description: Removido com sucesso }
+ *       403: { description: Proibido }
+ */
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await dbConnect()
   const { id } = req.query // No Pages Router, o id vem do objeto query

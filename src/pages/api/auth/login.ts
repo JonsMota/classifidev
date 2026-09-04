@@ -7,6 +7,30 @@ import { stringifySetCookie } from 'cookie'
 
 const SECRET = process.env.JWT_SECRET
 
+/**
+ * @swagger
+ * /api/auth/login:
+ *   post:
+ *     tags: [Autenticação]
+ *     summary: Realiza login
+ *     description: Retorna um cookie HTTP-Only seguro se as credenciais estiverem corretas.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [identifier, password]
+ *             properties:
+ *               identifier: { type: string, description: 'Email ou User' }
+ *               password: { type: string }
+ *     responses:
+ *       200:
+ *         description: Login realizado com sucesso
+ *       401:
+ *         description: Credenciais inválidas
+ */
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', ['POST'])

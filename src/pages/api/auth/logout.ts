@@ -1,6 +1,18 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { stringifySetCookie } from 'cookie'
 
+/**
+ * @swagger
+ * /api/auth/logout:
+ *   post:
+ *     tags: [Autenticação]
+ *     summary: Realiza logout
+ *     description: Invalida e remove o cookie de sessão do usuário.
+ *     responses:
+ *       200:
+ *         description: Logout realizado com sucesso
+ */
+
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', ['POST'])
