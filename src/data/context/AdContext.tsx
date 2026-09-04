@@ -31,16 +31,16 @@ export function AdProvider({ children }: { children: ReactNode }) {
     try {
       const resp = await fetch('/api/ads')
       if (!resp.ok) throw new Error('Falha ao buscar dados da API')
-      
-      // A API agora retorna userInfo junto com ads e userId	
-      const data: { 
-        ads: ApiAd[] 
-        userId: string | null 
+
+      // A API agora retorna userInfo junto com ads e userId
+      const data: {
+        ads: ApiAd[]
+        userId: string | null
         userInfo: UserInfo | null
       } = await resp.json()
 
       // Mapeamos a lista de anúncios que está dentro do objeto `data
-     const formattedData = data.ads.map((ad) => ({
+      const formattedData = data.ads.map((ad) => ({
         ...ad,
         id: ad._id.toString(), // Converte o _id do MongoDB para id
         userId: ad.userId // Garantimos que o userId está no objeto formatado
@@ -51,13 +51,13 @@ export function AdProvider({ children }: { children: ReactNode }) {
       setUserInfo(data.userInfo) // Armazena as informações do usuário.
     } catch (error) {
       console.error('Falha ao buscar anúncios:', error)
-      setAds([])  // Em caso de erro, garante que a lista fique vazia
+      setAds([]) // Em caso de erro, garante que a lista fique vazia
       setLoggedInUserId(null) // Limpeza de segurança.
-      setUserInfo(null) 
+      setUserInfo(null)
     }
   }, [])
   // Função de logout criada
-  const logout = useCallback(async () => { 
+  const logout = useCallback(async () => {
     try {
       await fetch('/api/auth/logout', {
         method: 'POST'
@@ -73,7 +73,7 @@ export function AdProvider({ children }: { children: ReactNode }) {
   }, [fetchAds])
 
   async function addAd(newAd: Omit<InterfaceClassified, 'id' | 'date' | 'userId'>) {
-    try {                                                                  
+    try {
       await fetch('/api/ads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -113,15 +113,18 @@ export function AdProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AdContext.Provider value={{ 
-      ads, 
-      loggedInUserId, 
-      userInfo, // Disponibiliza userInfo.
-      addAd, 
-      updateAd, 
-      deleteAd, 
-      logout,   // Disponibiliza logout.
-      fetchAds }}>
+    <AdContext.Provider
+      value={{
+        ads,
+        loggedInUserId,
+        userInfo, // Disponibiliza userInfo.
+        addAd,
+        updateAd,
+        deleteAd,
+        logout, // Disponibiliza logout.
+        fetchAds
+      }}
+    >
       {children}
     </AdContext.Provider>
   )

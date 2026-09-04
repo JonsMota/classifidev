@@ -22,9 +22,8 @@ const UserSchema = new Schema({
     required: [true, 'O email é obrigatório.'],
     maxlength: 100,
     unique: true,
-    // Adicionamos uma validação de formato de email no backend
     match: [
-      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+      /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
       'Por favor, preencha um endereço de email válido.'
     ]
   },
