@@ -3,6 +3,32 @@ import dbConnect from '@/lib/mongoose'
 import User from '@/models/User'
 import { hash } from 'bcryptjs'
 
+/**
+ * @swagger
+ * /api/auth/register:
+ *   post:
+ *     tags: [Autenticação]
+ *     summary: Registra um novo usuário
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [firstName, lastName, user, email, password]
+ *             properties:
+ *               firstName: { type: string }
+ *               lastName: { type: string }
+ *               user: { type: string }
+ *               email: { type: string }
+ *               password: { type: string }
+ *     responses:
+ *       201:
+ *         description: Usuário criado com sucesso
+ *       400:
+ *         description: Erro de validação ou usuário já existente
+ */
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', ['POST'])
