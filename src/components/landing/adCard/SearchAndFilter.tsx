@@ -70,12 +70,12 @@ const Input = styled.input`
   }
 
   @media (max-width: 665px) {
-     width: 100%;
-     text-align: center;
-     border-bottom: 1px solid ${(props) => props.theme.searchText};
-     box-sizing: border-box;
-     padding: 0px 30px 5px 0px;
-   }
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid ${(props) => props.theme.searchText};
+    box-sizing: border-box;
+    padding: 0px 30px 5px 0px;
+  }
 `
 
 const Separator = styled.div`

@@ -10,6 +10,9 @@ Uma plataforma de anúncios classificados construída com Next.js, TypeScript e 
 
 </div>
 
+### 🔗 Demonstração
+👉 **[Acesse o projeto online na Vercel](https://classifidev.vercel.app/)**
+
 ## Sobre o projeto
 
 O ClassifiDev permite cadastrar usuários, autenticar por email ou nome de usuário, publicar anúncios e gerenciar os próprios anúncios. A aplicação usa o Pages Router do Next.js e uma API serverless implementada em `src/pages/api`.

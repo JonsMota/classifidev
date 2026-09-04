@@ -40,7 +40,7 @@ const UserInfo = styled.div`
 
 const WelcomeText = styled.span`
   font-weight: 300;
-  
+
   @media (max-width: 768px) {
     display: none; // Esconde "Olá," em telas menores para economizar espaço.
   }
@@ -69,10 +69,11 @@ const LogoutButton = styled.button`
 `
 
 export default function Menu() {
-  const { loggedInUserId, userInfo, logout } = useContext(AdContext) 
-  const [isClient, setIsClient] = useState(false) 
+  const { loggedInUserId, userInfo, logout } = useContext(AdContext)
+  const [isClient, setIsClient] = useState(false)
 
-  useEffect(() => { //muda esse estado para true assim que a tela carrega.
+  useEffect(() => {
+    //muda esse estado para true assim que a tela carrega.
     setIsClient(true)
   }, [])
 
@@ -97,17 +98,15 @@ export default function Menu() {
             <WelcomeText>Olá,</WelcomeText>
             <UserName>{userInfo.firstName}</UserName>
           </UserInfo>
-          
+
           <Link href="/ads/create" passHref legacyBehavior>
             <a style={{ textDecoration: 'none' }}>
               <StyledButton>Criar anúncio</StyledButton>
             </a>
           </Link>
-          
+
           {/* Botão de saída */}
-          <LogoutButton onClick={handleLogout}>
-            Sair
-          </LogoutButton>
+          <LogoutButton onClick={handleLogout}>Sair</LogoutButton>
         </>
       ) : (
         <Link href="/login" passHref legacyBehavior>
@@ -117,4 +116,3 @@ export default function Menu() {
     </MenuContainer>
   )
 }
-
